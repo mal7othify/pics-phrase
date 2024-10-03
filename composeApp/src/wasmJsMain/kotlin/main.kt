@@ -5,8 +5,8 @@ import org.company.picsphrase.App
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
-    val body = document.body ?: return
-    ComposeViewport(body) {
-        App()
-    }
+  val body = document.body ?: return
+  ComposeViewport(body) {
+    App()
+  }
 }

@@ -17,7 +17,9 @@ multiplatformSettings = "1.2.0"
 sqlDelight = "2.0.2"
 kstore = "0.8.0"
 buildConfig = "5.4.0"
-composeIcons = "1.1.1"
+gradleKtlint = "12.1.1" # Update this to the latest version
+ktlint = "0.48.0" # Update this to the latest version
+ktlintComposeRuleset = "0.4.15" # Version of your custom ruleset
 
 [libraries]
 
@@ -52,7 +54,8 @@ sqlDelight-driver-android = { module = "app.cash.sqldelight:android-driver", ver
 sqlDelight-driver-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
 sqlDelight-driver-js = { module = "app.cash.sqldelight:web-worker-driver", version.ref = "sqlDelight" }
 kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
-composeIcons-featherIcons = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "composeIcons" }
+ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
+ktlintComposeRules = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlintComposeRuleset" }
 
 [plugins]
 
@@ -63,3 +66,4 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
+gradleKtlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "gradleKtlint" }

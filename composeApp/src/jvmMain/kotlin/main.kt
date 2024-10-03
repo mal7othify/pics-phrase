@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:filename")
+
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
@@ -7,17 +9,20 @@ import androidx.compose.ui.window.rememberWindowState
 import java.awt.Dimension
 import org.company.picsphrase.App
 
-fun main() = application {
+fun main() =
+  application {
     Window(
-        title = "PicsPhrase",
-        state = rememberWindowState(width = 800.dp, height = 600.dp),
-        onCloseRequest = ::exitApplication,
+      title = "PicsPhrase",
+      state = rememberWindowState(width = 800.dp, height = 600.dp),
+      onCloseRequest = ::exitApplication
     ) {
-        window.minimumSize = Dimension(350, 600)
-        App()
+      window.minimumSize = Dimension(350, 600)
+      App()
     }
-}
+  }
 
 @Preview
 @Composable
-fun AppPreview() { App() }
+fun AppPreview() {
+  App()
+}
