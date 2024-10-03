@@ -1,0 +1,84 @@
+# Gradle
+.gradle/
+build/
+*/build
+out/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Gradle Wrapper
+gradle-wrapper.jar
+gradle-wrapper.properties
+
+# Logs
+*.log
+
+# Android specific files
+/app/build/
+/app/.cxx/
+.cxx
+/app/local.properties
+
+# Android Studio
+.localhistory
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/gradle.xml
+.idea/misc.xml
+.idea/runConfigurations
+.idea/inspectionProfiles
+.idea/dictionaries
+*.apk
+*.jks
+*.ap_
+*.dex
+*.class
+/captures/
+/.externalNativeBuild/
+
+
+# macOS specific files
+.DS_Store
+
+# iOS build folder
+iosApp/build/
+
+# Xcode
+iosApp/Pods/
+iosApp/Podfile.lock
+iosApp/xcuserdata/
+xcuserdata/
+iosApp/DerivedData/
+iosApp/.env
+Pods/
+
+# Swift Package Manager
+iosApp/.swiftpm
+iosApp/Package.resolved
+
+
+# Desktop build folder
+desktopApp/build/
+desktopApp/out/
+
+# Windows specific files
+Thumbs.db
+
+# Web/WASM build folder
+webApp/build/
+webApp/out/
+
+# Compose Multiplatform specific folders
+.idea/runConfigurations/
+.compose-build/
+.kotlin
+local.properties
+*yarn.lock
