@@ -5,176 +5,186 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import org.company.picsphrase.items.FormKeys
+import org.company.picsphrase.items.OptionsUiItems
 import org.company.picsphrase.theme.AppTheme
 import org.company.picsphrase.util.noRippleClickable
+import org.company.picsphrase.viewmodel.AppViewModel
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import picsphrase.composeapp.generated.resources.Res
+import picsphrase.composeapp.generated.resources.empty_image
 import picsphrase.composeapp.generated.resources.ic_upload
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
-  var selectedImage by remember { mutableStateOf<ImageBitmap?>(null) }
-  var selectedLanguage by remember { mutableStateOf("Arabic") }
-  var includeHashtags by remember { mutableStateOf(true) }
-  var captionStyle by remember { mutableStateOf("Long caption") }
-
-  Column(
+  val viewModel = viewModel<AppViewModel>()
+  val uiItems by viewModel.optionsUiFlow.collectAsState(arrayListOf())
+  LazyColumn(
     modifier =
-      Modifier
-        .background(
-          MaterialTheme.colorScheme.surface
-        ).fillMaxSize()
-        .padding(30.dp)
+    Modifier
+      .background(
+        MaterialTheme.colorScheme.surface
+      ).fillMaxSize()
+      .padding(30.dp)
   ) {
-    TopAppBar(
-      title = {
-        Text(
-          text = "Pics Phrase",
-          fontSize = 24.sp,
-          fontWeight = FontWeight.Bold,
-          modifier = Modifier.padding(bottom = 16.dp)
-        )
-      }
-    )
-
-    if (selectedImage == null) {
-      Box(
-        modifier =
-          Modifier
-            .size(300.dp, 200.dp)
-            .padding(bottom = 16.dp),
-        contentAlignment = Alignment.Center
-      ) {
-        Box(
-          modifier =
+    items(uiItems) { item ->
+      when (item) {
+        is OptionsUiItems.TitleItem -> {
+          Text(
+            text = stringResource(item.title),
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            modifier =
             Modifier
-              .fillMaxSize()
-              .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(8.dp)),
-          contentAlignment = Alignment.Center
-        ) {
-          Text(text = "No image uploaded yet ...", color = Color.Gray)
+              .fillMaxWidth()
+              .padding(vertical = 16.dp),
+            textAlign = TextAlign.Center
+          )
         }
+
+        is OptionsUiItems.ImageItem -> {
+          if (item.imageBitmap == null) {
+            Box(
+              modifier =
+              Modifier
+                .fillMaxWidth()
+                .defaultMinSize(minHeight = 200.dp)
+                .padding(bottom = 16.dp)
+                .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(8.dp)),
+              contentAlignment = Alignment.Center
+            ) {
+              Text(
+                text = stringResource(Res.string.empty_image),
+                color = Color.Gray,
+                textAlign = TextAlign.Center
+              )
+            }
+          } else {
+            // TODO: Add image
+          }
+        }
+
+        is OptionsUiItems.ButtonItem -> {
+          Button(
+            onClick = { /* Upload action */ },
+            colors =
+            ButtonDefaults.buttonColors().copy(
+              containerColor = MaterialTheme.colorScheme.primary
+            ),
+            modifier =
+            Modifier
+              .fillMaxWidth()
+              .padding(bottom = 16.dp),
+            shape = RoundedCornerShape(8.dp)
+          ) {
+            Icon(
+              painter = painterResource(Res.drawable.ic_upload),
+              contentDescription = stringResource(item.title),
+              modifier = Modifier.size(20.dp),
+              tint = MaterialTheme.colorScheme.onPrimary
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+              text = stringResource(item.title),
+              color = MaterialTheme.colorScheme.onPrimary
+            )
+          }
+        }
+
+        is OptionsUiItems.OptionItem -> {
+          Text(
+            text = stringResource(item.title),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold
+          )
+
+          val selectedOption =
+            when (item.options) {
+              FormKeys.LanguageType.entries -> viewModel.selectedLanguage.value
+              FormKeys.IncludeHashtagsType.entries -> viewModel.includeHashtags.value
+              FormKeys.CaptionType.entries -> viewModel.captionStyle.value
+              else -> null
+            }
+
+          selectedOption?.let {
+            RadioGroup(
+              options = item.options,
+              selectedOption = it,
+              onClick = { option ->
+                when (option) {
+                  is FormKeys.LanguageType -> viewModel.selectedLanguage.value = option
+                  is FormKeys.IncludeHashtagsType -> viewModel.includeHashtags.value = option
+                  is FormKeys.CaptionType -> viewModel.captionStyle.value = option
+                }
+              }
+            )
+          }
+          Spacer(modifier = Modifier.height(12.dp))
+        }
+
+        else -> {}
       }
-    } else {
-      // TODO: Add image
     }
-
-    Button(
-      onClick = { /* Upload action */ },
-      colors = ButtonDefaults.buttonColors().copy(containerColor = Color(0xFFD81B60)),
-      modifier = Modifier.padding(bottom = 16.dp),
-      shape = RoundedCornerShape(8.dp)
-    ) {
-      Icon(
-        painter = painterResource(Res.drawable.ic_upload),
-        contentDescription = "Upload Icon",
-        modifier = Modifier.size(20.dp),
-        tint = Color.White
-      )
-      Spacer(modifier = Modifier.width(8.dp))
-      Text(text = "Upload Image", color = Color.White)
-    }
-
-    Text(
-      text = "Choose Caption Language",
-      fontSize = 16.sp,
-      fontWeight = FontWeight.SemiBold,
-      modifier = Modifier.padding(bottom = 8.dp)
-    )
-
-    RadioGroup(
-      options = listOf("Arabic", "English"),
-      selectedOption = selectedLanguage,
-      onOptionSelected = { selectedLanguage = it }
-    )
-
-    Spacer(modifier = Modifier.height(16.dp))
-
-    Text(
-      text = "Include Hashtags?",
-      fontSize = 16.sp,
-      fontWeight = FontWeight.SemiBold,
-      modifier = Modifier.padding(bottom = 8.dp)
-    )
-
-    RadioGroup(
-      options = listOf("Yes", "No"),
-      selectedOption = if (includeHashtags) "Yes" else "No",
-      onOptionSelected = { includeHashtags = it == "Yes" }
-    )
-
-    Spacer(modifier = Modifier.height(16.dp))
-
-    Text(
-      text = "Caption Style:",
-      fontSize = 16.sp,
-      fontWeight = FontWeight.SemiBold,
-      modifier = Modifier.padding(bottom = 8.dp)
-    )
-
-    RadioGroup(
-      options = listOf("Long caption", "Short caption", "Surprise me!"),
-      selectedOption = captionStyle,
-      onOptionSelected = { captionStyle = it }
-    )
   }
 }
 
 @Composable
 fun RadioGroup(
-  options: List<String>,
-  selectedOption: String,
-  onOptionSelected: (String) -> Unit
+  options: List<FormKeys.FormOptionType>,
+  selectedOption: FormKeys.FormOptionType,
+  onClick: (FormKeys.FormOptionType) -> Unit
 ) {
   Column {
     options.forEach { option ->
       Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier =
-          Modifier
-            .noRippleClickable { onOptionSelected(option) }
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
+        Modifier
+          .noRippleClickable { onClick(option) }
+          .fillMaxWidth()
       ) {
         RadioButton(
           selected = option == selectedOption,
-          onClick = { onOptionSelected(option) },
+          onClick = { onClick(option) },
           colors =
-            RadioButtonDefaults.colors(
-              selectedColor = Color(0xFFD81B60)
-            )
+          RadioButtonDefaults.colors(
+            selectedColor = Color(0xFFD81B60)
+          )
         )
-        Text(text = option)
+        Text(
+          text = stringResource(option.displayName)
+        )
       }
     }
   }
@@ -182,7 +192,7 @@ fun RadioGroup(
 
 @Preview()
 @Composable
-fun DefaultPreview() {
+private fun DefaultPreview() {
   AppTheme {
     MainScreen()
   }
