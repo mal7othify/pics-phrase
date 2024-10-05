@@ -1,0 +1,22 @@
+<resources>
+  <string name="app_name">Pics Phrase</string>
+  <string name="empty_image">لم يتم تحميل
+    أي صورة بعد ...</string>
+  <string name="upload_image_button">تحميل صورة</string>
+  <string name="first_option_title">اختر/اختاري لغة التعليق</string>
+  <string name="first_option_arabic">العربية</string>
+  <string name="first_option_english">الإنجليزية</string>
+
+  <string name="second_option_title">هل تريد/ين إضافة أوسمة/هاشتاقات؟</string>
+  <string name="second_option_yes">نعم!</string>
+  <string name="second_option_no">لا</string>
+
+  <string name="third_option_title">نمط التعليق:</string>
+  <string name="third_option_long">تعليق مفصّل</string>
+  <string name="third_option_short">تعليق مختصر</string>
+  <string name="third_option_random">خليها مفاجأة!</string>
+
+  <string name="result_title">اختر/اختاري أفضل تعليق يناسبك 💁🏻‍♀️ 💁🏾‍♂️</string>
+  <string name="regenerate_button">توليد تعليقات أخرى</string>
+  <string name="upload_new_image_button">تحميل صورة جديدة</string>
+</resources>

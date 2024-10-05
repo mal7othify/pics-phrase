@@ -1,3 +1,22 @@
 <resources>
   <string name="app_name">Pics Phrase</string>
+  <string name="empty_image">No image
+uploaded yet ...</string>
+  <string name="upload_image_button">Upload Image</string>
+  <string name="first_option_title">Choose Caption Language</string>
+  <string name="first_option_arabic">Arabic</string>
+  <string name="first_option_english">English</string>
+
+  <string name="second_option_title">Include Hashtags?</string>
+  <string name="second_option_yes">Yes!</string>
+  <string name="second_option_no">No</string>
+
+  <string name="third_option_title">Caption Style:</string>
+  <string name="third_option_long">Detailed caption</string>
+  <string name="third_option_short">Summarized caption</string>
+  <string name="third_option_random">Surprise me!</string>
+
+  <string name="result_title">Choose the best caption that suits you 💁🏻‍♀️ 💁🏾‍♂️</string>
+  <string name="regenerate_button">Regenerate Content</string>
+  <string name="upload_new_image_button">Upload New Image</string>
 </resources>
