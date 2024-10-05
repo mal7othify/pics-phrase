@@ -60,6 +60,7 @@ kotlin {
       implementation(libs.coil.network.ktor)
       implementation(libs.multiplatformSettings)
       implementation(libs.kstore)
+      implementation(libs.calf.filepicker)
     }
 
     commonTest.dependencies {
