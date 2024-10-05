@@ -20,6 +20,7 @@ buildConfig = "5.4.0"
 gradleKtlint = "12.1.1" # Update this to the latest version
 ktlint = "0.48.0" # Update this to the latest version
 ktlintComposeRuleset = "0.4.15" # Version of your custom ruleset
+calfFilePicker = "0.5.5"
 
 [libraries]
 
