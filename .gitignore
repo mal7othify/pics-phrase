@@ -82,3 +82,4 @@ webApp/out/
 .kotlin
 local.properties
 *yarn.lock
+*.properties
