@@ -1,6 +1,7 @@
 package org.company.picsphrase.widgets
 
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.unit.dp
 import org.company.picsphrase.theme.allRoundCornerShape8dp
 import org.company.picsphrase.theme.iconSize
 import org.company.picsphrase.theme.largePadding
@@ -22,6 +24,7 @@ import org.company.picsphrase.theme.mediumPadding
 fun PicsPhraseButton(
   title: String,
   leadingIcon: Painter,
+  isEnabled: Boolean,
   onClick: () -> Unit
 ) {
   Button(
@@ -30,13 +33,16 @@ fun PicsPhraseButton(
     },
     colors =
       ButtonDefaults.buttonColors().copy(
-        containerColor = MaterialTheme.colorScheme.primary
+        containerColor = MaterialTheme.colorScheme.primary,
+        disabledContainerColor = MaterialTheme.colorScheme.surfaceDim
       ),
     modifier =
       Modifier
+        .defaultMinSize(minHeight = 65.dp)
         .fillMaxWidth()
         .padding(bottom = largePadding),
-    shape = allRoundCornerShape8dp
+    shape = allRoundCornerShape8dp,
+    enabled = isEnabled
   ) {
     Icon(
       painter = leadingIcon,

@@ -17,13 +17,16 @@ import picsphrase.composeapp.generated.resources.third_option_title
 import picsphrase.composeapp.generated.resources.upload_image_button
 
 class AppViewModel : ViewModel() {
-  val optionsUiItems: ArrayList<OptionsUiItems> = arrayListOf()
+  private val optionsUiItems: ArrayList<OptionsUiItems> = arrayListOf()
   val optionsUiFlow = MutableStateFlow(arrayListOf<OptionsUiItems>())
 
   var selectedImage = mutableStateOf<ImageBitmap?>(null)
   var selectedLanguage = mutableStateOf(FormKeys.LanguageType.ARABIC)
   var includeHashtags = mutableStateOf(FormKeys.IncludeHashtagsType.TRUE)
   var captionStyle = mutableStateOf(FormKeys.CaptionType.RANDOM)
+
+  var isLoading = mutableStateOf(false)
+  var currentProgress = mutableStateOf(0.8f)
 
   init {
     setupUi()

@@ -7,12 +7,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mohamedrejeb.calf.core.LocalPlatformContext
 import com.mohamedrejeb.calf.io.readByteArray
@@ -34,58 +34,68 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun MainScreen() {
   val viewModel = viewModel<AppViewModel>()
-  val uiItems by viewModel.optionsUiFlow.collectAsState(arrayListOf())
+  val uiItems by viewModel.optionsUiFlow.collectAsStateWithLifecycle(arrayListOf())
 
   val selectedImage by remember { viewModel.selectedImage }
   val scope = rememberCoroutineScope()
   val context = LocalPlatformContext.current
 
-  val pickerLauncher = rememberFilePickerLauncher(
-    type = FilePickerFileType.Custom(
-      listOf("image/png", "image/jpeg")
-    ),
-    selectionMode = FilePickerSelectionMode.Single,
-    onResult = { files ->
-      scope.launch {
-        files.firstOrNull()?.let { file ->
-          // Do something with the selected file
-          // You can get the ByteArray of the file
-          viewModel.selectedImage.value = file.readByteArray(context).toImageBitmap()
+  val pickerLauncher =
+    rememberFilePickerLauncher(
+      type =
+        FilePickerFileType.Custom(
+          listOf("image/png", "image/jpeg")
+        ),
+      selectionMode = FilePickerSelectionMode.Single,
+      onResult = { files ->
+        scope.launch {
+          files.firstOrNull()?.let { file ->
+            // Do something with the selected file
+            // You can get the ByteArray of the file
+            viewModel.selectedImage.value =
+              file.readByteArray(context).toImageBitmap()
+            viewModel.isLoading.value = true
+          }
         }
       }
-    }
-  )
+    )
 
   LazyColumn(
     modifier =
-    Modifier
-      .background(
-        MaterialTheme.colorScheme.surface
-      ).fillMaxSize()
-      .padding(horizontal = 30.dp)
+      Modifier
+        .background(
+          MaterialTheme.colorScheme.surface
+        ).fillMaxSize()
+        .padding(horizontal = 30.dp)
   ) {
     items(uiItems) { item ->
       when (item) {
         is OptionsUiItems.TitleItem -> {
           PicsPhraseTitle(
-            title = stringResource(
-              item.title
-            )
+            title =
+              stringResource(
+                item.title
+              )
           )
         }
 
         is OptionsUiItems.ImageItem -> {
           PicsPhraseImage(
-            selectedImage = selectedImage
+            selectedImage = selectedImage,
+            isLoading = viewModel.isLoading.value,
+            currentProgress = viewModel.currentProgress.value
           ) {
-            pickerLauncher.launch()
+            if (!viewModel.isLoading.value) {
+              pickerLauncher.launch()
+            }
           }
         }
 
         is OptionsUiItems.ButtonItem -> {
           PicsPhraseButton(
             title = stringResource(item.title),
-            leadingIcon = painterResource(item.leadingIcon)
+            leadingIcon = painterResource(item.leadingIcon),
+            isEnabled = !viewModel.isLoading.value
           ) {
             pickerLauncher.launch()
           }

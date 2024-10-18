@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,8 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import org.company.picsphrase.theme.allRoundCornerShape8dp
 import org.company.picsphrase.theme.imageHeight
 import org.company.picsphrase.theme.largePadding
@@ -26,6 +29,8 @@ import picsphrase.composeapp.generated.resources.empty_image
 @Composable
 fun PicsPhraseImage(
   selectedImage: ImageBitmap?,
+  isLoading: Boolean,
+  currentProgress: Float,
   onClick: () -> Unit
 ) {
   Box(
@@ -49,6 +54,18 @@ fun PicsPhraseImage(
         textAlign = TextAlign.Center
       )
     } else {
+      if (isLoading) {
+        LinearProgressIndicator(
+          modifier =
+            Modifier
+              .fillMaxWidth()
+              .padding(horizontal = 33.dp),
+          progress = { currentProgress },
+          color = MaterialTheme.colorScheme.primary,
+          trackColor = MaterialTheme.colorScheme.surfaceDim,
+          strokeCap = StrokeCap.Round
+        )
+      }
       Image(
         modifier =
           Modifier
@@ -56,7 +73,8 @@ fun PicsPhraseImage(
             .clip(allRoundCornerShape8dp),
         bitmap = selectedImage,
         contentDescription = null,
-        contentScale = ContentScale.Crop
+        contentScale = ContentScale.Crop,
+        alpha = if (isLoading) 0.3f else 1f
       )
     }
   }
