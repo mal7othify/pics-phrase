@@ -32,10 +32,8 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun MainScreen() {
-  val viewModel = viewModel<AppViewModel>()
+fun MainScreen(viewModel: AppViewModel = viewModel { AppViewModel() }) {
   val uiItems by viewModel.optionsUiFlow.collectAsStateWithLifecycle(arrayListOf())
-
   val selectedImage by remember { viewModel.selectedImage }
   val scope = rememberCoroutineScope()
   val context = LocalPlatformContext.current
